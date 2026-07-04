@@ -99,11 +99,47 @@ curl -G "https://graph.facebook.com/v21.0/search" \
 
 ---
 
+## איסוף הלידים ל-Google Sheet
+
+הפקודה `sync-leads` מושכת את הלידים שנכנסו דרך הטפסים ומוסיפה אותם ל-Google Sheet. היא **חסינת-כפילויות** — ליד שכבר קיים בגיליון (לפי ה-Lead ID) מדולג, אז אפשר להריץ אותה שוב ושוב (למשל בתזמון) בלי חשש.
+
+עמודות הגיליון (נכתבות אוטומטית בשורת הכותרת בהרצה הראשונה):
+`Received | Lead ID | Form | Full name | Email | Phone | All fields`
+
+### הכנה חד-פעמית (Google)
+
+1. ב-[Google Cloud Console](https://console.cloud.google.com) → **APIs & Services** → הפעילו את **Google Sheets API**.
+2. צרו **Service Account** והורידו לו מפתח **JSON**.
+3. פתחו את ה-Google Sheet שלכם ולחצו **Share** — שתפו אותו עם כתובת המייל של ה-Service Account (מסתיימת ב-`...iam.gserviceaccount.com`) עם הרשאת **Editor**.
+4. העתיקו את ה-**Sheet ID** מתוך ה-URL: `/spreadsheets/d/<זה_ה-ID>/edit`.
+5. מלאו ב-`.env`: `GOOGLE_SHEET_ID`, וכן `GOOGLE_SERVICE_ACCOUNT_KEY_FILE` (נתיב לקובץ ה-JSON) או `GOOGLE_SERVICE_ACCOUNT_KEY` (ה-JSON עצמו).
+
+בצד Meta ה-token כבר צריך `leads_retrieval` (מופיע ברשימת ההרשאות למעלה).
+
+### הרצה
+
+```bash
+npm run build
+npm run sync-leads:built
+```
+
+כברירת מחדל מסונכרנים כל הטפסים בדף. לצמצום לטפסים מסוימים: `LEAD_FORM_IDS=123,456` ב-`.env`.
+
+### תזמון אוטומטי (רץ לבד כל כמה דקות)
+
+הוסיפו ל-crontab (למשל כל 15 דקות):
+
+```cron
+*/15 * * * * cd /path/to/ad-automation && npm run sync-leads:built >> sync.log 2>&1
+```
+
+---
+
 ## מה הכלי עושה ומה לא
 
-**כן:** מעלה מדיה, יוצר קמפיין/ad set/מודעה, יוצר ומחבר טופס לידים, ברירת מחדל PAUSED, מצב dry-run.
+**כן:** מעלה מדיה, יוצר קמפיין/ad set/מודעה, יוצר ומחבר טופס לידים, ברירת מחדל PAUSED, מצב dry-run, ומסנכרן לידים אוטומטית ל-Google Sheet (חסין כפילויות).
 
-**לא:** לא מפיק וידאו מקצועי (מקבל קובץ מוכן), לא עוקף את אישור המודעות של Meta, ולא שולף את הלידים עצמם — לאיסוף הלידים ל-Sheets/מייל צריך שלב נוסף (webhook של `leadgen` או משיכה תקופתית מ-`/{form_id}/leads`). אפשר להוסיף.
+**לא:** לא מפיק וידאו מקצועי (מקבל קובץ מוכן), ולא עוקף את אישור המודעות של Meta.
 
 ---
 

@@ -1,6 +1,12 @@
 import { readFile } from "node:fs/promises";
 import { basename } from "node:path";
-import type { Config } from "../config.js";
+
+/** The subset of config the HTTP client needs (satisfied by Config). */
+export interface MetaClientConfig {
+  accessToken: string;
+  graphVersion: string;
+  dryRun: boolean;
+}
 
 /**
  * Thin wrapper around the Meta Graph / Marketing API.
@@ -9,7 +15,7 @@ import type { Config } from "../config.js";
  * module has no external dependencies.
  */
 export class MetaClient {
-  constructor(private readonly config: Config) {}
+  constructor(private readonly config: MetaClientConfig) {}
 
   private get base(): string {
     return `https://graph.facebook.com/${this.config.graphVersion}`;
@@ -79,6 +85,15 @@ export class MetaClient {
       ...params,
     });
     const res = await fetch(`${this.base}/${path}?${search.toString()}`);
+    return this.handle(res, context);
+  }
+
+  /**
+   * GET an absolute URL (used to follow Graph API `paging.next` cursors,
+   * which already include the version, params and access token).
+   */
+  async getAbsolute(url: string, context = "getAbsolute"): Promise<any> {
+    const res = await fetch(url);
     return this.handle(res, context);
   }
 

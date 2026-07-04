@@ -9,7 +9,9 @@
   "scripts": {
     "build": "tsc",
     "create": "node --experimental-strip-types src/cli.ts",
-    "create:built": "node dst/cli.js"
+    "create:built": "node dst/cli.js",
+    "sync-leads": "node --experimental-strip-types src/sync-leads.ts",
+    "sync-leads:built": "node dst/sync-leads.js"
   },
   "license": "MIT",
   "devDependencies": {

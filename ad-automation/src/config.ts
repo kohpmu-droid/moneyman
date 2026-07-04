@@ -36,6 +36,35 @@ function boolEnv(name: string, fallback = false): boolean {
   return ["1", "true", "yes", "on"].includes(raw.toLowerCase());
 }
 
+export interface LeadSyncConfig {
+  accessToken: string;
+  pageId: string;
+  graphVersion: string;
+  /** Explicit form ids to sync; when empty, all forms on the page are synced. */
+  formIds: string[];
+  sheetId: string;
+  sheetTab: string;
+  serviceAccountKey?: string;
+  serviceAccountKeyFile?: string;
+}
+
+export function loadLeadSyncConfig(): LeadSyncConfig {
+  return {
+    accessToken: required("META_ACCESS_TOKEN"),
+    pageId: required("META_PAGE_ID"),
+    graphVersion: process.env.GRAPH_API_VERSION || "v21.0",
+    formIds: (process.env.LEAD_FORM_IDS || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean),
+    sheetId: required("GOOGLE_SHEET_ID"),
+    sheetTab: process.env.GOOGLE_SHEET_TAB || "Leads",
+    serviceAccountKey: process.env.GOOGLE_SERVICE_ACCOUNT_KEY || undefined,
+    serviceAccountKeyFile:
+      process.env.GOOGLE_SERVICE_ACCOUNT_KEY_FILE || undefined,
+  };
+}
+
 export function loadConfig(): Config {
   return {
     accessToken: required("META_ACCESS_TOKEN"),
