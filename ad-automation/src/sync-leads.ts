@@ -3,6 +3,7 @@ import { loadLeadSyncConfig } from "./config.js";
 import { MetaClient } from "./meta/client.js";
 import { getLeads, listLeadForms, type Lead } from "./meta/leads.js";
 import { SheetsClient } from "./google/sheets.js";
+import { loadWhatsAppConfig, notifyNewLeads } from "./whatsapp/notify.js";
 
 /**
  * Pulls leads from your Meta lead form(s) and appends new ones to a Google
@@ -77,12 +78,12 @@ async function main() {
     (await sheets.readColumn("B2:B")).filter(Boolean),
   );
 
-  const newRows: string[][] = [];
+  const freshLeads: Array<{ lead: Lead; formName: string }> = [];
   for (const form of forms) {
     const leads = await getLeads(meta, form.id);
     const fresh = leads.filter((lead) => !existingIds.has(lead.id));
     for (const lead of fresh) {
-      newRows.push(leadToRow(lead, form.name));
+      freshLeads.push({ lead, formName: form.name });
       existingIds.add(lead.id);
     }
     console.log(
@@ -91,10 +92,20 @@ async function main() {
   }
 
   // Oldest first, so the sheet reads chronologically.
-  newRows.reverse();
-  await sheets.appendRows(newRows);
+  freshLeads.reverse();
+  await sheets.appendRows(
+    freshLeads.map(({ lead, formName }) => leadToRow(lead, formName)),
+  );
+  console.log(`\nAdded ${freshLeads.length} new lead(s) to the sheet.`);
 
-  console.log(`\nDone. Added ${newRows.length} new lead(s) to the sheet.`);
+  // Best-effort WhatsApp notifications (only if configured).
+  const wa = loadWhatsAppConfig();
+  if (wa && freshLeads.length) {
+    const sent = await notifyNewLeads(wa, freshLeads);
+    console.log(`Sent ${sent} WhatsApp notification(s).`);
+  } else if (!wa) {
+    console.log("WhatsApp notifications disabled (not configured).");
+  }
 }
 
 main().catch((err) => {
