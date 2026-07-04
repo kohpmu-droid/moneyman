@@ -1,0 +1,19 @@
+{
+  "name": "ad-automation",
+  "version": "0.1.0",
+  "description": "Brief-in, lead-ad-out automation for Facebook/Instagram via the Meta Marketing API",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "create": "node --experimental-strip-types src/cli.ts",
+    "create:built": "node dst/cli.js"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^26.1.0",
+    "typescript": "^5.9.3"
+  }
+}

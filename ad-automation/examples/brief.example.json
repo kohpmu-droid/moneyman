@@ -1,0 +1,34 @@
+{
+  "campaignName": "מבצע קיץ – יולי 2026",
+  "dailyBudget": 50,
+  "creative": {
+    "type": "image",
+    "path": "./examples/summer-sale.jpg"
+  },
+  "copy": {
+    "primaryText": "רק החודש — 20% הנחה על כל הקולקציה! השאירי פרטים ונחזור אלייך עם הצעה אישית 💛",
+    "headline": "מבצע קיץ בלעדי",
+    "description": "משלוח חינם מעל 200₪",
+    "callToAction": "SIGN_UP"
+  },
+  "targeting": {
+    "countries": ["IL"],
+    "ageMin": 28,
+    "ageMax": 45,
+    "genders": ["female"]
+  },
+  "leadForm": {
+    "name": "לידים – מבצע קיץ",
+    "intro": {
+      "headline": "רוצה לשמוע עוד?",
+      "description": "השאירי פרטים ונחזור אלייך תוך יום עסקים אחד."
+    },
+    "questions": ["FULL_NAME", "EMAIL", "PHONE"],
+    "privacyPolicyUrl": "https://example.com/privacy",
+    "thankYou": {
+      "title": "תודה!",
+      "body": "קיבלנו את הפרטים ונחזור אלייך בהקדם.",
+      "websiteUrl": "https://example.com"
+    }
+  }
+}
