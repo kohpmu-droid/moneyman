@@ -13,7 +13,9 @@
     "sync-leads": "node --experimental-strip-types src/sync-leads.ts",
     "sync-leads:built": "node dst/sync-leads.js",
     "generate": "node --experimental-strip-types src/generate-ad.ts",
-    "generate:built": "node dst/generate-ad.js"
+    "generate:built": "node dst/generate-ad.js",
+    "report": "node --experimental-strip-types src/report.ts",
+    "report:built": "node dst/report.js"
   },
   "license": "MIT",
   "devDependencies": {

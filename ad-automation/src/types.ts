@@ -57,6 +57,16 @@ export interface Targeting {
    * Look them up with the targeting-search endpoint (see README).
    */
   interests?: Array<{ id: string; name?: string }>;
+  /**
+   * Radius targeting around specific points (e.g. city centres). When set,
+   * these replace the country targeting so the ad runs only near these spots.
+   */
+  customLocations?: Array<{
+    name?: string;
+    latitude: number;
+    longitude: number;
+    radiusKm: number;
+  }>;
 }
 
 export interface LeadFormSpec {
@@ -86,6 +96,11 @@ export interface AdBrief {
    * Defaults to the page URL derived from META_PAGE_ID.
    */
   link?: string;
+  /**
+   * Optional ISO-8601 end time (with timezone). When set, the ad set stops
+   * automatically at this time — e.g. "2026-07-31T23:59:00+03:00".
+   */
+  endDate?: string;
 }
 
 export interface PipelineResult {

@@ -24,8 +24,20 @@ export async function createCampaign(
 }
 
 function buildTargeting(t: Targeting = {}): Record<string, unknown> {
+  // Radius targeting (custom_locations) takes precedence over whole-country.
+  const geo_locations = t.customLocations?.length
+    ? {
+        custom_locations: t.customLocations.map((loc) => ({
+          latitude: loc.latitude,
+          longitude: loc.longitude,
+          radius: loc.radiusKm,
+          distance_unit: "kilometer",
+        })),
+      }
+    : { countries: t.countries ?? ["IL"] };
+
   const targeting: Record<string, unknown> = {
-    geo_locations: { countries: t.countries ?? ["IL"] },
+    geo_locations,
     age_min: t.ageMin ?? 18,
     age_max: t.ageMax ?? 65,
   };
@@ -50,21 +62,25 @@ export async function createAdSet(
   // Meta expects the budget in minor units (agorot/cents).
   const dailyBudgetMinor = Math.round(brief.dailyBudget * 100);
 
+  const params: Record<string, unknown> = {
+    name: `${brief.campaignName} – ad set`,
+    campaign_id: campaignId,
+    daily_budget: dailyBudgetMinor,
+    billing_event: "IMPRESSIONS",
+    optimization_goal: "LEAD_GENERATION",
+    bid_strategy: "LOWEST_COST_WITHOUT_CAP",
+    // Instant forms open inside the ad rather than sending to a website.
+    destination_type: "ON_AD",
+    promoted_object: { page_id: config.pageId },
+    targeting: buildTargeting(brief.targeting),
+    status: config.activate ? "ACTIVE" : "PAUSED",
+  };
+  // Auto-stop the campaign at the promo's end (no manual pause needed).
+  if (brief.endDate) params.end_time = brief.endDate;
+
   const res = await client.post(
     `act_${config.adAccountId}/adsets`,
-    {
-      name: `${brief.campaignName} – ad set`,
-      campaign_id: campaignId,
-      daily_budget: dailyBudgetMinor,
-      billing_event: "IMPRESSIONS",
-      optimization_goal: "LEAD_GENERATION",
-      bid_strategy: "LOWEST_COST_WITHOUT_CAP",
-      // Instant forms open inside the ad rather than sending to a website.
-      destination_type: "ON_AD",
-      promoted_object: { page_id: config.pageId },
-      targeting: buildTargeting(brief.targeting),
-      status: config.activate ? "ACTIVE" : "PAUSED",
-    },
+    params,
     "createAdSet",
   );
   return res.id;
