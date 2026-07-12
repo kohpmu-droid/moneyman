@@ -1,0 +1,53 @@
+name: Sync Leads
+
+# Pulls new Facebook/Instagram leads into the Google Sheet and sends a
+# WhatsApp notification for each. Runs on a schedule (and on demand).
+# Configure the secrets under Settings > Secrets and variables > Actions.
+
+on:
+  workflow_dispatch: {}
+  schedule:
+    # Every 15 minutes. GitHub may delay runs under load — this is best-effort.
+    - cron: "*/15 * * * *"
+
+# Don't let two syncs overlap.
+concurrency:
+  group: sync-leads
+  cancel-in-progress: false
+
+jobs:
+  sync-leads:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ad-automation
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: ad-automation/package-lock.json
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Sync leads and notify
+        run: npm run sync-leads:built
+        env:
+          # --- Meta ---
+          META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+          META_PAGE_ID: ${{ secrets.META_PAGE_ID }}
+          LEAD_FORM_IDS: ${{ secrets.LEAD_FORM_IDS }}
+          # --- Google Sheets ---
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_SHEET_TAB: ${{ secrets.GOOGLE_SHEET_TAB }}
+          # Inline service-account JSON (paste the whole key file as one secret).
+          GOOGLE_SERVICE_ACCOUNT_KEY: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_KEY }}
+          # --- WhatsApp (optional; leave secrets empty to disable) ---
+          WHATSAPP_PHONE_NUMBER_ID: ${{ secrets.WHATSAPP_PHONE_NUMBER_ID }}
+          WHATSAPP_TO: ${{ secrets.WHATSAPP_TO }}
+          WHATSAPP_ACCESS_TOKEN: ${{ secrets.WHATSAPP_ACCESS_TOKEN }}
+          WHATSAPP_TEMPLATE_NAME: ${{ secrets.WHATSAPP_TEMPLATE_NAME }}
+          WHATSAPP_TEMPLATE_LANG: ${{ secrets.WHATSAPP_TEMPLATE_LANG }}

@@ -177,9 +177,14 @@ npm run sync-leads:built
 
 מגבלת בטיחות: `WHATSAPP_MAX_PER_RUN` (ברירת מחדל 20) מונע הצפה בהרצה הראשונה.
 
-### תזמון אוטומטי (רץ לבד כל כמה דקות)
+### תזמון אוטומטי (רץ לבד — מומלץ)
 
-הוסיפו ל-crontab (למשל כל 15 דקות):
+הדרך הפשוטה: יש **GitHub Actions workflow** מוכן בריפו — [`.github/workflows/sync-leads.yml`](../.github/workflows/sync-leads.yml). הוא מריץ את הסנכרון + וואטסאפ כל 15 דקות, **בלי מחשב שצריך להישאר דלוק**.
+
+הגדרה חד-פעמית: ב-GitHub → **Settings → Secrets and variables → Actions**, הוסיפו את הסודות:
+`META_ACCESS_TOKEN`, `META_PAGE_ID`, `GOOGLE_SHEET_ID`, `GOOGLE_SERVICE_ACCOUNT_KEY` (כל ה-JSON), ואת ה-`WHATSAPP_*` (אם רוצים התראות). אפשר גם להריץ ידנית מלשונית **Actions** בכל רגע.
+
+לחלופין, להרצה ממחשב משלכם עם crontab (כל 15 דקות):
 
 ```cron
 */15 * * * * cd /path/to/ad-automation && npm run sync-leads:built >> sync.log 2>&1
