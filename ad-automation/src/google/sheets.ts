@@ -47,7 +47,9 @@ export class SheetsClient {
     }
     const sa = JSON.parse(raw) as ServiceAccount;
     if (!sa.client_email || !sa.private_key) {
-      throw new Error("Service account JSON must have client_email and private_key");
+      throw new Error(
+        "Service account JSON must have client_email and private_key",
+      );
     }
     return new SheetsClient(sa, opts.spreadsheetId, opts.tab);
   }
@@ -86,7 +88,10 @@ export class SheetsClient {
     if (!res.ok || !body.access_token) {
       throw new Error(`Google auth failed: ${JSON.stringify(body)}`);
     }
-    this.token = { value: body.access_token, expiresAt: now + (body.expires_in ?? 3600) };
+    this.token = {
+      value: body.access_token,
+      expiresAt: now + (body.expires_in ?? 3600),
+    };
     return this.token.value;
   }
 

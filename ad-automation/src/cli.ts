@@ -50,9 +50,7 @@ async function main() {
   console.log("\nDone. Summary:");
   console.log(JSON.stringify(result, null, 2));
   if (result.status === "paused" && !config.dryRun) {
-    console.log(
-      `\nReview & enable here:\n${result.adsManagerUrl}`,
-    );
+    console.log(`\nReview & enable here:\n${result.adsManagerUrl}`);
   }
 }
 

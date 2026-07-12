@@ -45,7 +45,11 @@ export function loadWhatsAppConfig(): WhatsAppConfig | null {
   };
 }
 
-function leadFields(lead: Lead): { name: string; phone: string; email: string } {
+function leadFields(lead: Lead): {
+  name: string;
+  phone: string;
+  email: string;
+} {
   const f = lead.fields;
   return {
     name:
@@ -131,7 +135,9 @@ export async function notifyNewLeads(
       await sendLeadNotification(cfg, lead, formName);
       sent++;
     } catch (err: any) {
-      console.log(`  WhatsApp notification failed for ${lead.id}: ${err.message}`);
+      console.log(
+        `  WhatsApp notification failed for ${lead.id}: ${err.message}`,
+      );
     }
   }
   return sent;

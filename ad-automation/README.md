@@ -67,26 +67,26 @@ ACTIVATE_ADS=true npm run create:built -- examples/brief.example.json
 
 ## מבנה הבריף
 
-| שדה | חובה | הסבר |
-|------|:---:|------|
-| `campaignName` | ✅ | שם הקמפיין |
-| `dailyBudget` | ✅ | תקציב יומי בשקלים (המרה ל-agorot אוטומטית) |
-| `creative.type` | ✅ | `"image"` או `"video"` |
-| `creative.path` | ✅ | נתיב מקומי לקובץ המדיה |
-| `creative.thumbnailPath` | | תמונת תצוגה לסרטון |
-| `copy.primaryText` | ✅ | הטקסט הראשי מעל המדיה |
-| `copy.headline` | ✅ | כותרת קצרה |
-| `copy.description` | | שורת משנה |
-| `copy.callToAction` | | כפתור, ברירת מחדל `SIGN_UP` |
-| `targeting.countries` | | קודי מדינה, ברירת מחדל `["IL"]` |
-| `targeting.ageMin/ageMax` | | טווח גילאים |
-| `targeting.genders` | | `["female"]` / `["male"]`, השמטה = כולם |
-| `targeting.interests` | | תחומי עניין (צריך `id` של Meta) |
-| `leadForm.name` | ✅ | שם טופס הלידים |
-| `leadForm.privacyPolicyUrl` | ✅ | קישור למדיניות פרטיות (חובה מצד Meta) |
-| `leadForm.questions` | | שדות לאיסוף, ברירת מחדל שם+מייל+טלפון |
-| `leadForm.intro` / `thankYou` | | מסך פתיחה ומסך תודה |
-| `link` | | קישור יעד, ברירת מחדל דף הפייסבוק |
+| שדה                           | חובה | הסבר                                       |
+| ----------------------------- | :--: | ------------------------------------------ |
+| `campaignName`                |  ✅  | שם הקמפיין                                 |
+| `dailyBudget`                 |  ✅  | תקציב יומי בשקלים (המרה ל-agorot אוטומטית) |
+| `creative.type`               |  ✅  | `"image"` או `"video"`                     |
+| `creative.path`               |  ✅  | נתיב מקומי לקובץ המדיה                     |
+| `creative.thumbnailPath`      |      | תמונת תצוגה לסרטון                         |
+| `copy.primaryText`            |  ✅  | הטקסט הראשי מעל המדיה                      |
+| `copy.headline`               |  ✅  | כותרת קצרה                                 |
+| `copy.description`            |      | שורת משנה                                  |
+| `copy.callToAction`           |      | כפתור, ברירת מחדל `SIGN_UP`                |
+| `targeting.countries`         |      | קודי מדינה, ברירת מחדל `["IL"]`            |
+| `targeting.ageMin/ageMax`     |      | טווח גילאים                                |
+| `targeting.genders`           |      | `["female"]` / `["male"]`, השמטה = כולם    |
+| `targeting.interests`         |      | תחומי עניין (צריך `id` של Meta)            |
+| `leadForm.name`               |  ✅  | שם טופס הלידים                             |
+| `leadForm.privacyPolicyUrl`   |  ✅  | קישור למדיניות פרטיות (חובה מצד Meta)      |
+| `leadForm.questions`          |      | שדות לאיסוף, ברירת מחדל שם+מייל+טלפון      |
+| `leadForm.intro` / `thankYou` |      | מסך פתיחה ומסך תודה                        |
+| `link`                        |      | קישור יעד, ברירת מחדל דף הפייסבוק          |
 
 ### מציאת `id` לתחומי עניין (targeting)
 
@@ -116,13 +116,13 @@ npm run create:built -- out/brief.json    # יוצר הכל כטיוטה (PAUSED
 
 ### דגלים
 
-| דגל | ברירת מחדל | הסבר |
-|------|:---:|------|
-| `--budget=50` | 50 | תקציב יומי בשקלים |
-| `--out=./out` | `./out` | תיקיית פלט |
-| `--privacy=URL` | מ-`.env` | קישור מדיניות פרטיות לטופס |
-| `--video=clip.mp4` | — | להשתמש בסרטון מוכן במקום תמונה מיוצרת |
-| `--no-image` | — | לא לייצר תמונה (תוסיפי בעצמך) |
+| דגל                | ברירת מחדל | הסבר                                  |
+| ------------------ | :--------: | ------------------------------------- |
+| `--budget=50`      |     50     | תקציב יומי בשקלים                     |
+| `--out=./out`      |  `./out`   | תיקיית פלט                            |
+| `--privacy=URL`    |  מ-`.env`  | קישור מדיניות פרטיות לטופס            |
+| `--video=clip.mp4` |     —      | להשתמש בסרטון מוכן במקום תמונה מיוצרת |
+| `--no-image`       |     —      | לא לייצר תמונה (תוסיפי בעצמך)         |
 
 ### הכנה
 

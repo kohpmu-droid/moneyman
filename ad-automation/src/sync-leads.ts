@@ -27,9 +27,7 @@ const HEADER = [
 function leadToRow(lead: Lead, formName: string): string[] {
   const f = lead.fields;
   const fullName =
-    f.full_name ??
-    [f.first_name, f.last_name].filter(Boolean).join(" ") ??
-    "";
+    f.full_name ?? [f.first_name, f.last_name].filter(Boolean).join(" ") ?? "";
   return [
     lead.createdTime,
     lead.id,
@@ -86,9 +84,7 @@ async function main() {
       freshLeads.push({ lead, formName: form.name });
       existingIds.add(lead.id);
     }
-    console.log(
-      `  ${form.name}: ${leads.length} total, ${fresh.length} new`,
-    );
+    console.log(`  ${form.name}: ${leads.length} total, ${fresh.length} new`);
   }
 
   // Oldest first, so the sheet reads chronologically.

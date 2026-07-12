@@ -19,7 +19,8 @@ function parseArgs(argv: string[]): Args {
   let budget = 50;
   let out = "./out";
   let privacy =
-    process.env.PRIVACY_POLICY_URL || "https://REPLACE-WITH-YOUR-PRIVACY-POLICY";
+    process.env.PRIVACY_POLICY_URL ||
+    "https://REPLACE-WITH-YOUR-PRIVACY-POLICY";
   let makeImage = true;
   let videoPath: string | undefined;
 
@@ -33,7 +34,14 @@ function parseArgs(argv: string[]): Args {
       makeImage = false;
     } else words.push(arg);
   }
-  return { request: words.join(" ").trim(), budget, out, privacy, makeImage, videoPath };
+  return {
+    request: words.join(" ").trim(),
+    budget,
+    out,
+    privacy,
+    makeImage,
+    videoPath,
+  };
 }
 
 async function main() {
@@ -50,7 +58,9 @@ async function main() {
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
-    console.error("Missing ANTHROPIC_API_KEY. Add it to your environment / .env.");
+    console.error(
+      "Missing ANTHROPIC_API_KEY. Add it to your environment / .env.",
+    );
     process.exit(1);
   }
   const model = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
@@ -102,10 +112,14 @@ async function main() {
   console.log("\nPreview:");
   console.log(`  כותרת:  ${content.copy.headline}`);
   console.log(`  טקסט:   ${content.copy.primaryText}`);
-  console.log(`  קהל:    ${content.targeting.countries.join(",")} | גיל ${content.targeting.ageMin}-${content.targeting.ageMax}${content.targeting.genders.length ? ` | ${content.targeting.genders.join(",")}` : ""}`);
+  console.log(
+    `  קהל:    ${content.targeting.countries.join(",")} | גיל ${content.targeting.ageMin}-${content.targeting.ageMax}${content.targeting.genders.length ? ` | ${content.targeting.genders.join(",")}` : ""}`,
+  );
 
   if (brief.leadForm.privacyPolicyUrl.includes("REPLACE")) {
-    console.log("\n⚠️  Set a real privacyPolicyUrl (Meta requires it) — pass --privacy=URL or edit the brief.");
+    console.log(
+      "\n⚠️  Set a real privacyPolicyUrl (Meta requires it) — pass --privacy=URL or edit the brief.",
+    );
   }
   console.log(`\nNext: review ${briefPath}, then create it (PAUSED) with:`);
   console.log(`  npm run create:built -- ${briefPath}`);

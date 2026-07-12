@@ -36,7 +36,11 @@ export async function runPipeline(
       : await uploadVideo(client, config.adAccountId, brief.creative.path);
 
   log("Creating lead form");
-  const leadFormId = await createLeadForm(client, config.pageId, brief.leadForm);
+  const leadFormId = await createLeadForm(
+    client,
+    config.pageId,
+    brief.leadForm,
+  );
 
   log("Creating campaign");
   const campaignId = await createCampaign(client, config, brief);

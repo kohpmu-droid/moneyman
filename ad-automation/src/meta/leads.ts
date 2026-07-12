@@ -35,9 +35,10 @@ export async function getLeads(
     fields: "id,created_time,field_data",
     limit: "100",
   };
-  if (sinceUnix) params.filtering = JSON.stringify([
-    { field: "time_created", operator: "GREATER_THAN", value: sinceUnix },
-  ]);
+  if (sinceUnix)
+    params.filtering = JSON.stringify([
+      { field: "time_created", operator: "GREATER_THAN", value: sinceUnix },
+    ]);
 
   let path: string | null = `${formId}/leads`;
   let query: Record<string, string> | undefined = params;

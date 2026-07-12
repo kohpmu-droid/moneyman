@@ -1,8 +1,5 @@
 import { generateJson, type AnthropicOptions } from "./anthropic.js";
-import type {
-  CallToActionType,
-  LeadQuestionType,
-} from "../types.js";
+import type { CallToActionType, LeadQuestionType } from "../types.js";
 
 /**
  * The parts of an ad brief the model writes from a free-form request.
